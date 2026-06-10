@@ -25,19 +25,22 @@ It wrote the code, ran away, and now the game is unplayable.
 
 ## 📝 Document Your Experience
 
-- [ ] Describe the game's purpose.
-- [ ] Detail which bugs you found.
-- [ ] Explain what fixes you applied.
+- [x] **Game purpose:** A number guessing game where the player tries to guess a secret number within a limited number of attempts, receiving Higher/Lower hints each round. The difficulty setting changes the number range and attempt limit.
+- [x] **Bugs found:** (1) Inverted Higher/Lower hints; (2) Secret converted to string on even attempts, breaking all comparisons; (3) Hard difficulty range was 1–50 (easier than Normal 1–100); (4) New Game button always used range 1–100 ignoring difficulty; (5) Attempts counter started at 1 instead of 0, causing negative display.
+- [x] **Fixes applied:** Swapped hint messages in `check_guess`; removed the even/odd string conversion block; corrected Hard range to 1–200 and dynamic info text; updated New Game to use `low`/`high` from selected difficulty; initialized attempts to 0; refactored all logic into `logic_utils.py`.
 
 ## 📸 Demo Walkthrough
 
-Describe your fixed game in numbered steps so a reader can follow along without watching a video:
+Sample game on **Normal** difficulty (range 1–100, secret = 42):
 
-1. Fixed inverted hints in `check_guess`: "Too High" now correctly says "Go LOWER" and "Too Low" says "Go HIGHER".
-2. Fixed secret-as-string bug in `app.py`: removed the even/odd attempt block that converted the secret number to a string, causing comparisons to fail and hints to be wrong on every other guess.
-3. Fixed wrong Hard difficulty range in `get_range_for_difficulty`: Hard was 1–50 (easier than Normal), corrected to 1–200. Also fixed hardcoded "1 to 100" info text to use the actual `low`/`high` values.
-4. Fixed New Game button ignoring difficulty in `app.py`: was always generating a secret with `randint(1, 100)`, now uses the correct `low`/`high` range for the selected difficulty.
-5. Fixed attempts counter initializing to 1 instead of 0 in `app.py`: caused "Attempts left" to show one fewer than correct and go negative past the limit.
+1. Open the app and select **Normal** difficulty — sidebar shows range 1–100, 8 attempts allowed.
+2. Enter guess **50** → hint: "📉 Go LOWER!" — score unchanged, attempts left drops to 7.
+3. Enter guess **25** → hint: "📈 Go HIGHER!" — attempts left: 6.
+4. Enter guess **37** → hint: "📈 Go HIGHER!" — attempts left: 5.
+5. Enter guess **43** → hint: "📉 Go LOWER!" — attempts left: 4.
+6. Enter guess **42** → "🎉 Correct!" — balloons appear, score updates, game ends.
+7. Guess history table below the game shows all 5 guesses with their hints.
+8. Click **New Game** to reset score and attempts and play again at the same difficulty.
 
 **Screenshot** *(optional)*: ![alt text](image.png)
 
@@ -65,3 +68,4 @@ tests/test_game_logic.py::test_guess_too_low PASSED                      [100%]
   - Color-coded hints: green (win), yellow (too high), blue (too low)
   - Guess history table shown below the game, listing every guess and its result
   - Win triggers balloons animation; game-end state shows colored success/error banner
+![alt text](image-1.png)
