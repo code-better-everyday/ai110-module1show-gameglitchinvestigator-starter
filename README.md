@@ -33,22 +33,35 @@ It wrote the code, ran away, and now the game is unplayable.
 
 Describe your fixed game in numbered steps so a reader can follow along without watching a video:
 
-1. <!-- Describe this step -->
-2. <!-- Describe this step -->
-3. <!-- Describe this step -->
-4. <!-- Describe this step -->
-5. <!-- Add more steps as needed -->
+1. Fixed inverted hints in `check_guess`: "Too High" now correctly says "Go LOWER" and "Too Low" says "Go HIGHER".
+2. Fixed secret-as-string bug in `app.py`: removed the even/odd attempt block that converted the secret number to a string, causing comparisons to fail and hints to be wrong on every other guess.
+3. Fixed wrong Hard difficulty range in `get_range_for_difficulty`: Hard was 1–50 (easier than Normal), corrected to 1–200. Also fixed hardcoded "1 to 100" info text to use the actual `low`/`high` values.
+4. Fixed New Game button ignoring difficulty in `app.py`: was always generating a secret with `randint(1, 100)`, now uses the correct `low`/`high` range for the selected difficulty.
+5. Fixed attempts counter initializing to 1 instead of 0 in `app.py`: caused "Attempts left" to show one fewer than correct and go negative past the limit.
 
-**Screenshot** *(optional)*: <!-- Insert a screenshot of your fixed, winning game here -->
+**Screenshot** *(optional)*: ![alt text](image.png)
 
 ## 🧪 Test Results
 
 ```
-# Paste your pytest output here, e.g.:
-# pytest tests/
-# ========================= X passed in 0.XXs =========================
+pytest tests/ -v
+============================= test session starts =============================
+platform win32 -- Python 3.13.13, pytest-9.0.3
+collected 3 items
+
+tests/test_game_logic.py::test_winning_guess PASSED                      [ 33%]
+tests/test_game_logic.py::test_guess_too_high PASSED                     [ 66%]
+tests/test_game_logic.py::test_guess_too_low PASSED                      [100%]
+
+============================== 3 passed in 0.10s ==============================
 ```
 
 ## 🚀 Stretch Features
 
-- [ ] [If you choose to complete Challenge 4, describe the Enhanced UI changes here — a screenshot is optional]
+- [x] Enhanced UI implemented:
+  - Fixed misleading caption ("Something is off." → "Debugged and playable.")
+  - Added score, attempts-left, and difficulty metrics row at the top
+  - Added progress bar that fills as attempts are used; warns with ⚠️ in the last 2 attempts
+  - Color-coded hints: green (win), yellow (too high), blue (too low)
+  - Guess history table shown below the game, listing every guess and its result
+  - Win triggers balloons animation; game-end state shows colored success/error banner
